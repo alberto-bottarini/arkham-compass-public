@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Come funziona il punteggio — Arkham Compass</title>
+  <meta name="description" content="Scopri le carte più giocate per ogni investigatore, basato sui mazzi della community su ArkhamDB." />
+  <meta property="og:title" content="Come funziona il punteggio — Arkham Compass" />
+  <meta property="og:description" content="Scopri le carte più giocate per ogni investigatore, basato sui mazzi della community su ArkhamDB." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://arkhamcompass.fans/it/come-funziona/" />
+  <meta property="og:site_name" content="Arkham Compass" />
+  <meta property="og:locale" content="it_IT" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Come funziona il punteggio — Arkham Compass" />
+  <meta name="twitter:description" content="Scopri le carte più giocate per ogni investigatore, basato sui mazzi della community su ArkhamDB." />
+  <link rel="canonical" href="https://arkhamcompass.fans/it/come-funziona/" />
+  <link rel="alternate" hreflang="en" href="https://arkhamcompass.fans/en/algorithm/" />
+  <link rel="alternate" hreflang="it" href="https://arkhamcompass.fans/it/come-funziona/" />
+  <link rel="alternate" hreflang="es" href="https://arkhamcompass.fans/es/como-funciona/" />
+  <link rel="alternate" hreflang="fr" href="https://arkhamcompass.fans/fr/comment-ca-marche/" />
+  <link rel="alternate" hreflang="de" href="https://arkhamcompass.fans/de/wie-es-funktioniert/" />
+  <link rel="alternate" hreflang="x-default" href="https://arkhamcompass.fans/en/algorithm/" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/assets/style.css?v=mr382zau" />
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D6LGL5FHMM"></script>
+  <script>gtag('js',new Date());gtag('config','G-D6LGL5FHMM');</script>
+  
+</head>
+<body>
+  <header class="site-header">
+    <a href="/it/" class="site-logo">
+      <span class="logo-icon">◉</span>
+      <span>Arkham Compass</span>
+    </a>
+    <div class="site-search" id="site-search">
+      <input type="text" id="search-input" class="site-search__input"
+             placeholder="Cerca investigatori e carte…"
+             data-no-results="Nessun risultato"
+             autocomplete="off" spellcheck="false" />
+      <div id="search-dropdown" class="site-search__dropdown" hidden></div>
+    </div>
+    <nav class="lang-nav" aria-label="Language"><a href="/en/algorithm/"
+         class="lang-switch"
+         aria-label="EN"
+         title="EN"
+         onclick="document.cookie='lang=en;path=/;max-age=31536000'">🇬🇧</a><a href="/it/come-funziona/"
+         class="lang-switch lang-switch--active"
+         aria-label="IT"
+         title="IT"
+         onclick="document.cookie='lang=it;path=/;max-age=31536000'">🇮🇹</a><a href="/es/como-funciona/"
+         class="lang-switch"
+         aria-label="ES"
+         title="ES"
+         onclick="document.cookie='lang=es;path=/;max-age=31536000'">🇪🇸</a><a href="/fr/comment-ca-marche/"
+         class="lang-switch"
+         aria-label="FR"
+         title="FR"
+         onclick="document.cookie='lang=fr;path=/;max-age=31536000'">🇫🇷</a><a href="/de/wie-es-funktioniert/"
+         class="lang-switch"
+         aria-label="DE"
+         title="DE"
+         onclick="document.cookie='lang=de;path=/;max-age=31536000'">🇩🇪</a></nav>
+  </header>
+  <nav class="site-nav" aria-label="Explore">
+    <a href="/it/top/" class="site-nav__link" onclick="document.cookie='lang=it;path=/;max-age=31536000'">Top 100</a>
+    <a href="/it/peggiori/" class="site-nav__link" onclick="document.cookie='lang=it;path=/;max-age=31536000'">Meno Giocate</a>
+    <a href="/it/stabilita/" class="site-nav__link" onclick="document.cookie='lang=it;path=/;max-age=31536000'">Stabilità</a>
+    <a href="/it/come-funziona/" class="site-nav__link site-nav__link--active" onclick="document.cookie='lang=it;path=/;max-age=31536000'">Come Funziona</a>
+  </nav>
+  <main>
+    
+    <div class="algo-page">
+      <a href="/it/" class="back-link">← Tutti gli Investigatori</a>
+      <h1 class="algo-page__title">Come funziona il punteggio</h1>
+
+      <p class="algo-page__intro">Ad ogni carta viene assegnato uno <strong>score di affinità</strong> per ciascun investigatore — un numero tra 0 e 100 che esprime quanto quella carta sia rilevante nella costruzione dei mazzi attuali per quell'investigatore.</p>
+
+      <section class="algo-section">
+        <h2>Il problema della frequenza grezza</h2>
+        <p>Un approccio ingenuo conterebbe in quanti mazzi appare una carta. Ma questo svantaggia le carte più nuove: una carta del Core Set (2016) ha avuto anni per accumulare presenze, mentre una uscita il mese scorso ne ha pochissime. Un semplice conteggio rankerebbe sempre le carte vecchie più in alto, indipendentemente dalla rilevanza nel meta attuale.</p>
+      </section>
+
+      <section class="algo-section">
+        <h2>Decadimento esponenziale nel tempo</h2>
+        <p>Pesamo ogni mazzo in base a quanto recentemente è stato creato. Un mazzo di oggi conta completamente; uno di 90 giorni fa conta la metà; uno di 180 giorni fa conta un quarto, e così via.</p>
+      </section>
+
+      <section class="algo-section">
+        <h2>Fattore di maturità</h2>
+        <p>La recency da sola non basta. Quando esce una nuova espansione, i giocatori inseriscono subito le nuove carte nei mazzi — non necessariamente perché siano fondamentali, ma perché sono nuove. Per contrastare questo &quot;hype da lancio&quot;, applichiamo un fattore di maturità a ogni coppia (mazzo, carta): una carta appena uscita quando il mazzo è stato creato contribuisce meno di una che era nel pool da mesi.</p>
+      </section>
+
+      <section class="algo-section">
+        <h2>La formula</h2>
+        <p class="algo-formula__label">Peso di recency di un mazzo:</p>
+        <div class="algo-formula">
+          <code>recency_weight(deck) = e<sup>−λ × days_ago</sup></code>
+        </div>
+        <p class="algo-formula__label">Fattore di maturità di una carta nel mazzo:</p>
+        <div class="algo-formula">
+          <code>maturity_factor(deck, card) = 1 − e<sup>−card_age_at_deck / MATURITY_DAYS</sup></code>
+        </div>
+        <p class="algo-formula__label">Score di affinità di una carta:</p>
+        <div class="algo-formula">
+          <code>score(card) = Σ(in_deck × recency_weight × maturity_factor) / Σ(recency_weight) × 100</code>
+        </div>
+        <p class="algo-formula__legend">dove <em>λ = ln(2) / 90</em> (decadimento recency) e <em>MATURITY_DAYS = 60</em>. <em>card_age_at_deck</em> = giorni tra l'uscita del pack e la creazione del mazzo. Le carte con data di uscita sconosciuta sono trattate come mature.</p>
+      </section>
+
+      <section class="algo-section">
+        <h2>Parametri correnti</h2>
+        <table class="algo-table">
+          <tr>
+            <th>Half-life di recency</th>
+            <td><strong>90 giorni</strong> — Un mazzo creato 90 giorni fa contribuisce la metà rispetto a uno creato oggi.</td>
+          </tr>
+          <tr>
+            <th>Half-life di maturità</th>
+            <td><strong>60 giorni</strong> — Una carta inclusa in un mazzo 60 giorni dopo l'uscita del pack contribuisce al 63% del suo peso pieno; dopo 180 giorni, al 95%.</td>
+          </tr>
+        </table>
+      </section>
+
+      <section class="algo-section">
+        <p class="algo-note">Il &quot;X / Y mazzi&quot; mostrato sotto ogni score è il conteggio grezzo — quanti mazzi su totale includono la carta, indipendentemente dalla pesatura. Fornisce contesto allo score.</p>
+      </section>
+
+      <section class="algo-section">
+        <h2>Cosa viene escluso</h2>
+        <p>Le carte identità dell'investigatore, le carte firma (uniche per ogni investigatore) e le debolezze base sono escluse dal ranking. La loro presenza è obbligatoria e non porta alcuna informazione sulle scelte di costruzione.</p>
+      </section>
+
+      <section class="algo-section">
+        <h2>Carte Esclusive</h2>
+        <p>La pagina di ogni investigatore mostra le 5 carte con il rapporto di esclusività più alto — carte che questo investigatore usa in modo sproporzionato rispetto agli altri. Una carta è &quot;esclusiva&quot; non perché solo questo investigatore possa usarla, ma perché la gioca molto più spesso della media.</p>
+        <p class="algo-formula__label" style="margin-top:.9rem">Rapporto di esclusività di una carta per un investigatore:</p>
+        <div class="algo-formula">
+          <code>exclusivity(carta, investigatore) = frequency(carta, investigatore) / avg_frequency(carta, altri_investigatori_attivi)</code>
+        </div>
+        <p class="algo-formula__legend"><em>Gli altri investigatori attivi</em> sono quelli che includono la carta in almeno il 5% dei loro mazzi. Le carte usate dall'investigatore in meno del 5% dei mazzi sono escluse. L'elenco è ordinato per rapporto di esclusività puro.</p>
+      </section>
+
+      <section class="algo-section">
+        <h2>Spesso Insieme</h2>
+        <p>Per ogni carta calcoliamo un &lt;strong&gt;punteggio di co-gioco&lt;/strong&gt; rispetto a tutte le altre: quanto spesso le due carte appaiono nello stesso mazzo? Se l'80% dei mazzi che includono Torcia include anche Percezione, il loro punteggio è 0,80. Viene calcolato globalmente su tutti gli investigatori e tutti i mazzi.</p>
+        <p class="algo-formula__label" style="margin-top:.9rem">Punteggio di co-gioco della carta B rispetto alla carta A:</p>
+        <div class="algo-formula">
+          <code>co_score(A→B) = mazzi_con_entrambi(A, B) / mazzi_con(A)</code>
+        </div>
+        <p class="algo-formula__legend">È un punteggio direzionale: co_score(A→B) può differire da co_score(B→A). Si salvano le top 10 per carta; 5 vengono mostrate di default nella sezione <em>Spesso Insieme</em> della pagina di ogni carta.</p>
+      </section>
+
+      <section class="algo-section">
+        <h2>Andamento nel tempo</h2>
+        <p>La pagina di ogni carta mostra un grafico della sua frequenza d'uso globale trimestre per trimestre dalla release — quante volte appare nei mazzi complessivamente, indipendentemente dall'investigatore. Differisce dallo score di affinità, che è per investigatore e pesato nel tempo.</p>
+        <table class="algo-table" style="margin-top:1rem">
+          <thead>
+            <tr><th>Etichetta</th><th>Significato</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="usage-chart__stability usage-chart__stability--staple">Staple</span></td>
+              <td>L'uso è stabile o in crescita nel tempo — una carta costantemente utile nel meta.</td>
+            </tr>
+            <tr>
+              <td><span class="usage-chart__stability usage-chart__stability--declining">In calo</span></td>
+              <td>L'uso è calato moderatamente dalla release — ancora giocata ma meno centrale rispetto al lancio.</td>
+            </tr>
+            <tr>
+              <td><span class="usage-chart__stability usage-chart__stability--hype">Hype</span></td>
+              <td>L'uso ha avuto un picco alla release e poi è calato significativamente — tipico di carte che hanno entusiasmato i giocatori all'inizio ma si sono rivelate situazionali o superate da opzioni successive.</td>
+            </tr>
+            <tr>
+              <td><span class="usage-chart__stability usage-chart__stability--late_bloomer">Scoperta tardiva</span></td>
+              <td>Uso quasi nullo all'inizio, crescita successiva — spesso carte le cui sinergie o investigatori di supporto sono arrivati dopo la release iniziale.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <p>Dati da <a href="https://arkhamdb.com" target="_blank" rel="noopener">ArkhamDB</a>.
+    Aggiornato ogni giorno.</p>
+    <p class="site-footer__legal">Arkham Horror: The Card Game © Fantasy Flight Games / Asmodee. This site is not affiliated with or endorsed by Fantasy Flight Games or Asmodee.</p>
+  </footer>
+  <div id="consent-banner" style="display:none">
+    <p>Usiamo Google Analytics per capire come viene utilizzato questo sito. Nessun dato personale viene raccolto senza il tuo consenso.</p>
+    <div class="consent-banner__actions">
+      <button id="consent-accept" class="consent-btn consent-btn--accept">Accetta</button>
+      <button id="consent-reject" class="consent-btn consent-btn--reject">Rifiuta</button>
+    </div>
+  </div>
+  <script>
+    window.__PAGE_SLUGS__ = {"investigators":"investigatori","cards":"carte","algorithm":"come-funziona","stability":"stabilita","top":"top","bottom":"peggiori","staple":"stabile","declining":"in-calo","hype":"hype","late_bloomer":"scoperta-tardiva","new":"recente"};
+    window.__SEARCH_I18N__ = {
+      investigator: "Investigatore",
+      guardian: "Guardiano",
+      seeker: "Studioso",
+      rogue: "Canaglia",
+      mystic: "Mistico",
+      survivor: "Sopravvissuto",
+      neutral: "Neutrale"
+    };
+  </script>
+  <script src="/assets/consent.js?v=mr382zau"></script>
+  <script src="/assets/search.js?v=mr382zau"></script>
+</body>
+</html>
